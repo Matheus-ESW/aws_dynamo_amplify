@@ -485,116 +485,118 @@ Carla"></textarea>
 
     const API_URL = "https://1erkayemb9.execute-api.us-east-1.amazonaws.com/prod/SorteioFunc";
 
-        async function sortearAPI(participants, winnersCount, mode) {
-          const response = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ participants, winnersCount, mode })
-          });
-
-          const wrapper = await response.json(); // {statusCode, headers, body}
-
-          // Se veio proxy response, o body é string JSON
-          const payload = (wrapper && typeof wrapper.body === "string")
-            ? JSON.parse(wrapper.body)
-            : wrapper;
-
-          if (!response.ok) {
-            throw new Error(payload?.error || wrapper?.message || `HTTP ${response.status}`);
-          }
-
-          return payload; // { winners: [...], ... }
-        }
-
-        async function draw() {
-          const participants = parseParticipants(participantsEl.value);
-          const mode = modeEl.value;
-          const requested = Math.max(1, Number(winnersCountEl.value || 1));
-
-          countParticipants.textContent = String(participants.length);
-          modeLabel.textContent = mode === "repeat" ? "Com repetição" : "Sem repetição";
-
-          if (participants.length === 0) {
-            showToast("Adicione pelo menos 1 participante.");
-            return;
-          }
-
-          if (mode === "no-repeat" && requested > participants.length) {
-            showToast("Sem repetição: a quantidade de vencedores não pode exceder a de participantes.");
-            return;
-          }
-
-          try {
-            drawBtn.disabled = true;
-            drawBtn.textContent = "Sorteando...";
-
-            const data = await sortearAPI(participants, requested, mode);
-
-            if (!Array.isArray(data.winners)) {
-              throw new Error("Resposta inesperada da API (winners não encontrado).");
-            }
-
-            renderWinners(data.winners);
-            showToast("Sorteio realizado com sucesso.");
-          } catch (err) {
-            console.error(err);
-            showToast(err.message || "Falha ao chamar a API.");
-          } finally {
-            drawBtn.disabled = false;
-            drawBtn.textContent = "Sortear";
-          }
-        }
-
-      function renderWinners(winners) {
-        winnersList.innerHTML = "";
-        countWinners.textContent = String(winners.length);
-        timestampLabel.textContent = formatNow();
-
-        winners.forEach((w, i) => {
-          const li = document.createElement("li");
-          li.textContent = `${i + 1}. ${w}`;
-          winnersList.appendChild(li);
-        });
-
-        winnerText.textContent = winners.length === 1 ? winners[0] : `${winners[0]} +${winners.length - 1}`;
-      }
-
-      function resetAll() {
-        participantsEl.value = "";
-        winnersCountEl.value = 1;
-        modeEl.value = "no-repeat";
-        winnerText.textContent = "—";
-        winnersList.innerHTML = "";
-        countParticipants.textContent = "0";
-        countWinners.textContent = "0";
-        modeLabel.textContent = "Sem repetição";
-        timestampLabel.textContent = "—";
-        showToast("Campos limpos.");
-      }
-
-      async function copyWinners() {
-        const items = [...winnersList.querySelectorAll("li")].map(li => li.textContent.replace(/^\d+\.\s*/, ""));
-        if (items.length === 0) {
-          showToast("Não há vencedores para copiar.");
-          return;
-        }
-        const text = items.join("\n");
-        try {
-          await navigator.clipboard.writeText(text);
-          showToast("Vencedores copiados.");
-        } catch {
-          showToast("Não foi possível copiar (permissão do navegador).");
-        }
-      }
-
-      drawBtn.addEventListener("click", draw);
-      resetBtn.addEventListener("click", resetAll);
-      copyBtn.addEventListener("click", copyWinners);
-
-      participantsEl.addEventListener("input", () => {
-        const participants = parseParticipants(participantsEl.value);
-        countParticipants.textContent = String(participants.length);
+    async function sortearAPI(participants, winnersCount, mode) {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ participants, winnersCount, mode })
       });
+
+      const wrapper = await response.json(); // proxy response
+
+      // Extrai o payload real
+      const payload =
+        wrapper && typeof wrapper.body === "string"
+          ? JSON.parse(wrapper.body)
+          : wrapper;
+
+      if (!response.ok) {
+        throw new Error(payload?.error || `HTTP ${response.status}`);
+      }
+
+      return payload; // { winners: [...] }
+    }
+
+    async function draw() {
+      const participants = parseParticipants(participantsEl.value);
+      const mode = modeEl.value;
+      const requested = Math.max(1, Number(winnersCountEl.value || 1));
+
+      countParticipants.textContent = String(participants.length);
+      modeLabel.textContent = mode === "repeat" ? "Com repetição" : "Sem repetição";
+
+      if (participants.length === 0) {
+        showToast("Adicione pelo menos 1 participante.");
+        return;
+      }
+
+      if (mode === "no-repeat" && requested > participants.length) {
+        showToast("Sem repetição: a quantidade de vencedores não pode exceder a de participantes.");
+        return;
+      }
+
+      try {
+        drawBtn.disabled = true;
+        drawBtn.textContent = "Sorteando...";
+
+        const data = await sortearAPI(participants, requested, mode);
+
+        if (!Array.isArray(data.winners)) {
+          throw new Error("Resposta inválida da API.");
+        }
+
+        renderWinners(data.winners);
+        showToast("Sorteio realizado com sucesso.");
+      } catch (err) {
+        console.error(err);
+        showToast(err.message || "Falha ao chamar a API.");
+      } finally {
+        drawBtn.disabled = false;
+        drawBtn.textContent = "Sortear";
+      }
+    }
+
+
+    function renderWinners(winners) {
+      winnersList.innerHTML = "";
+      countWinners.textContent = String(winners.length);
+      timestampLabel.textContent = formatNow();
+
+      winners.forEach((w, i) => {
+        const li = document.createElement("li");
+        li.textContent = `${i + 1}. ${w}`;
+        winnersList.appendChild(li);
+      });
+
+      winnerText.textContent = winners.length === 1 ? winners[0] : `${winners[0]} +${winners.length - 1}`;
+    }
+
+    function resetAll() {
+      participantsEl.value = "";
+      winnersCountEl.value = 1;
+      modeEl.value = "no-repeat";
+      winnerText.textContent = "—";
+      winnersList.innerHTML = "";
+      countParticipants.textContent = "0";
+      countWinners.textContent = "0";
+      modeLabel.textContent = "Sem repetição";
+      timestampLabel.textContent = "—";
+      showToast("Campos limpos.");
+    }
+
+    async function copyWinners() {
+      const items = [...winnersList.querySelectorAll("li")].map(li => li.textContent.replace(/^\d+\.\s*/, ""));
+      if (items.length === 0) {
+        showToast("Não há vencedores para copiar.");
+        return;
+      }
+      const text = items.join("\n");
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast("Vencedores copiados.");
+      } catch {
+        showToast("Não foi possível copiar (permissão do navegador).");
+      }
+    }
+
+    drawBtn.addEventListener("click", draw);
+    resetBtn.addEventListener("click", resetAll);
+    copyBtn.addEventListener("click", copyWinners);
+
+    participantsEl.addEventListener("input", () => {
+      const participants = parseParticipants(participantsEl.value);
+      countParticipants.textContent = String(participants.length);
+    });
   </script>
 </body>
 
