@@ -1,275 +1,329 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Página de Sorteio</title>
   <style>
-    :root{
-      --bg1:#0b1020;
-      --bg2:#101a3a;
-      --card:rgba(255,255,255,.08);
-      --card2:rgba(255,255,255,.12);
-      --text:#eaf0ff;
-      --muted:rgba(234,240,255,.75);
-      --accent:#6ae4ff;
-      --accent2:#a78bfa;
-      --danger:#ff6b6b;
-      --ok:#46e29b;
-      --border:rgba(255,255,255,.14);
-      --shadow:0 20px 50px rgba(0,0,0,.45);
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(900px 500px at 15% 20%, rgba(106,228,255,.22), transparent 60%),
-        radial-gradient(900px 500px at 85% 30%, rgba(167,139,250,.20), transparent 60%),
-        linear-gradient(160deg, var(--bg1), var(--bg2));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:28px;
-    }
-    .wrap{
-      width:min(980px, 100%);
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:18px;
-    }
-    @media (max-width: 880px){
-      .wrap{grid-template-columns:1fr}
+    :root {
+      --bg1: #0b1020;
+      --bg2: #101a3a;
+      --card: rgba(255, 255, 255, .08);
+      --card2: rgba(255, 255, 255, .12);
+      --text: #eaf0ff;
+      --muted: rgba(234, 240, 255, .75);
+      --accent: #6ae4ff;
+      --accent2: #a78bfa;
+      --danger: #ff6b6b;
+      --ok: #46e29b;
+      --border: rgba(255, 255, 255, .14);
+      --shadow: 0 20px 50px rgba(0, 0, 0, .45);
+      --radius: 18px;
     }
 
-    .card{
-      background:linear-gradient(180deg, var(--card), rgba(255,255,255,.05));
-      border:1px solid var(--border);
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 15% 20%, rgba(106, 228, 255, .22), transparent 60%),
+        radial-gradient(900px 500px at 85% 30%, rgba(167, 139, 250, .20), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+
+    .wrap {
+      width: min(980px, 100%);
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 880px) {
+      .wrap {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--card), rgba(255, 255, 255, .05));
+      border: 1px solid var(--border);
       box-shadow: var(--shadow);
       border-radius: var(--radius);
-      overflow:hidden;
-      position:relative;
-    }
-    .card::before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background:linear-gradient(120deg, rgba(106,228,255,.22), rgba(167,139,250,.18));
-      filter:blur(18px);
-      z-index:0;
-      opacity:.5;
-      pointer-events:none;
-    }
-    .card > *{position:relative; z-index:1}
-
-    header{
-      padding:22px 22px 10px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:14px;
-    }
-    h1{
-      margin:0;
-      font-size:20px;
-      letter-spacing:.3px;
-    }
-    .subtitle{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.4;
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.14);
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-    }
-    .dot{
-      width:8px;height:8px;border-radius:99px;
-      background:linear-gradient(180deg, var(--accent), var(--accent2));
-      box-shadow:0 0 18px rgba(106,228,255,.45);
+      overflow: hidden;
+      position: relative;
     }
 
-    .content{
-      padding:0 22px 22px;
-      display:grid;
-      gap:14px;
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(120deg, rgba(106, 228, 255, .22), rgba(167, 139, 250, .18));
+      filter: blur(18px);
+      z-index: 0;
+      opacity: .5;
+      pointer-events: none;
     }
 
-    label{
-      font-size:12px;
-      color:var(--muted);
-      display:block;
-      margin:0 0 6px;
+    .card>* {
+      position: relative;
+      z-index: 1
     }
 
-    textarea{
-      width:100%;
-      min-height:170px;
-      resize:vertical;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background:rgba(0,0,0,.18);
-      color:var(--text);
-      outline:none;
-      line-height:1.4;
-      font-size:14px;
-    }
-    textarea:focus{
-      border-color:rgba(106,228,255,.5);
-      box-shadow:0 0 0 4px rgba(106,228,255,.12);
+    header {
+      padding: 22px 22px 10px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
     }
 
-    .row{
-      display:grid;
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: .3px;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .14);
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 18px rgba(106, 228, 255, .45);
+    }
+
+    .content {
+      padding: 0 22px 22px;
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+      margin: 0 0 6px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 170px;
+      resize: vertical;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, .18);
+      color: var(--text);
+      outline: none;
+      line-height: 1.4;
+      font-size: 14px;
+    }
+
+    textarea:focus {
+      border-color: rgba(106, 228, 255, .5);
+      box-shadow: 0 0 0 4px rgba(106, 228, 255, .12);
+    }
+
+    .row {
+      display: grid;
       grid-template-columns: 1fr 1fr;
-      gap:12px;
-    }
-    @media (max-width: 520px){
-      .row{grid-template-columns:1fr}
+      gap: 12px;
     }
 
-    input[type="number"], select{
-      width:100%;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background:rgba(0,0,0,.18);
-      color:var(--text);
-      outline:none;
-      font-size:14px;
-    }
-    input[type="number"]:focus, select:focus{
-      border-color:rgba(167,139,250,.6);
-      box-shadow:0 0 0 4px rgba(167,139,250,.12);
+    @media (max-width: 520px) {
+      .row {
+        grid-template-columns: 1fr
+      }
     }
 
-    .actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-      margin-top:6px;
-    }
-    button{
-      appearance:none;
-      border:none;
-      padding:10px 14px;
-      border-radius:14px;
-      cursor:pointer;
-      font-weight:600;
-      color:#0b1020;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow:0 12px 22px rgba(0,0,0,.35);
-      transition:transform .08s ease, filter .15s ease;
-    }
-    button:hover{filter:saturate(1.1)}
-    button:active{transform:translateY(1px)}
-    button.secondary{
-      background:rgba(255,255,255,.10);
-      color:var(--text);
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow:none;
-    }
-    button.danger{
-      background:rgba(255,107,107,.14);
-      color:var(--text);
-      border:1px solid rgba(255,107,107,.28);
-      box-shadow:none;
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, .18);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
     }
 
-    .panel{
-      padding:22px;
-      display:grid;
-      gap:12px;
+    input[type="number"]:focus,
+    select:focus {
+      border-color: rgba(167, 139, 250, .6);
+      box-shadow: 0 0 0 4px rgba(167, 139, 250, .12);
     }
 
-    .result{
-      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      border:1px solid rgba(255,255,255,.16);
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    button {
+      appearance: none;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #0b1020;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 12px 22px rgba(0, 0, 0, .35);
+      transition: transform .08s ease, filter .15s ease;
+    }
+
+    button:hover {
+      filter: saturate(1.1)
+    }
+
+    button:active {
+      transform: translateY(1px)
+    }
+
+    button.secondary {
+      background: rgba(255, 255, 255, .10);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, .16);
+      box-shadow: none;
+    }
+
+    button.danger {
+      background: rgba(255, 107, 107, .14);
+      color: var(--text);
+      border: 1px solid rgba(255, 107, 107, .28);
+      box-shadow: none;
+    }
+
+    .panel {
+      padding: 22px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .result {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .06));
+      border: 1px solid rgba(255, 255, 255, .16);
       border-radius: var(--radius);
-      padding:16px;
-      display:grid;
-      gap:10px;
-    }
-    .result h2{
-      margin:0;
-      font-size:14px;
-      color:var(--muted);
-      font-weight:600;
-      letter-spacing:.2px;
-    }
-    .winner{
-      font-size:26px;
-      font-weight:800;
-      letter-spacing:.2px;
-      line-height:1.1;
-    }
-    .meta{
-      color:var(--muted);
-      font-size:12px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .pill{
-      background:rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.14);
-      padding:6px 10px;
-      border-radius:999px;
+      padding: 16px;
+      display: grid;
+      gap: 10px;
     }
 
-    .list{
-      background:rgba(0,0,0,.14);
-      border:1px solid rgba(255,255,255,.12);
+    .result h2 {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: .2px;
+    }
+
+    .winner {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      line-height: 1.1;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      background: rgba(0, 0, 0, .18);
+      border: 1px solid rgba(255, 255, 255, .14);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    .list {
+      background: rgba(0, 0, 0, .14);
+      border: 1px solid rgba(255, 255, 255, .12);
       border-radius: var(--radius);
-      padding:14px;
+      padding: 14px;
     }
-    .list-title{
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:10px;
-      color:var(--muted);
-      font-size:12px;
+
+    .list-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 12px;
     }
-    .mini{
+
+    .mini {
       font-variant-numeric: tabular-nums;
-      color:rgba(234,240,255,.85);
+      color: rgba(234, 240, 255, .85);
     }
-    ul{
-      margin:0;
-      padding:0 0 0 16px;
-      max-height:240px;
-      overflow:auto;
+
+    ul {
+      margin: 0;
+      padding: 0 0 0 16px;
+      max-height: 240px;
+      overflow: auto;
     }
-    li{margin:6px 0; color:rgba(234,240,255,.92)}
-    .hint{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.45;
+
+    li {
+      margin: 6px 0;
+      color: rgba(234, 240, 255, .92)
     }
-    .toast{
-      display:none;
-      margin-top:8px;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.22);
-      color:rgba(234,240,255,.9);
-      font-size:12px;
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
     }
-    .toast.show{display:block}
+
+    .toast {
+      display: none;
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: rgba(0, 0, 0, .22);
+      color: rgba(234, 240, 255, .9);
+      font-size: 12px;
+    }
+
+    .toast.show {
+      display: block
+    }
   </style>
 </head>
 
@@ -280,7 +334,8 @@
       <header>
         <div>
           <h1>Sorteio</h1>
-          <p class="subtitle">Cole uma lista de participantes (um por linha). Você pode sortear 1 ou mais vencedores, com ou sem repetição.</p>
+          <p class="subtitle">Cole uma lista de participantes (um por linha). Você pode sortear 1 ou mais vencedores,
+            com ou sem repetição.</p>
         </div>
         <div class="badge" title="Pronto para sortear">
           <span class="dot"></span> Pronto
@@ -295,7 +350,8 @@ Matheus
 Ana
 Bruno
 Carla"></textarea>
-          <div class="hint">Dica: linhas vazias serão ignoradas. Nomes duplicados serão tratados como participantes distintos (a menos que você normalize manualmente).</div>
+          <div class="hint">Dica: linhas vazias serão ignoradas. Nomes duplicados serão tratados como participantes
+            distintos (a menos que você normalize manualmente).</div>
         </div>
 
         <div class="row">
@@ -392,91 +448,149 @@ Carla"></textarea>
       return { value: arr[i], index: i };
     }
 
-    function draw() {
-      const participants = parseParticipants(participantsEl.value);
-      const mode = modeEl.value;
-      const requested = Math.max(1, Number(winnersCountEl.value || 1));
+    // function draw() {
+    //   const participants = parseParticipants(participantsEl.value);
+    //   const mode = modeEl.value;
+    //   const requested = Math.max(1, Number(winnersCountEl.value || 1));
 
-      countParticipants.textContent = String(participants.length);
-      modeLabel.textContent = mode === "repeat" ? "Com repetição" : "Sem repetição";
+    //   countParticipants.textContent = String(participants.length);
+    //   modeLabel.textContent = mode === "repeat" ? "Com repetição" : "Sem repetição";
 
-      if (participants.length === 0) {
-        showToast("Adicione pelo menos 1 participante.");
-        return;
+    //   if (participants.length === 0) {
+    //     showToast("Adicione pelo menos 1 participante.");
+    //     return;
+    //   }
+
+    //   if (mode === "no-repeat" && requested > participants.length) {
+    //     showToast("Sem repetição: a quantidade de vencedores não pode exceder a de participantes.");
+    //     return;
+    //   }
+
+    //   const winners = [];
+    //   const pool = participants.slice();
+
+    //   for (let k = 0; k < requested; k++) {
+    //     const source = (mode === "repeat") ? participants : pool;
+    //     const picked = pickOne(source);
+    //     winners.push(picked.value);
+
+    //     if (mode === "no-repeat") {
+    //       pool.splice(picked.index, 1);
+    //     }
+    //   }
+
+    //   renderWinners(winners);
+    //   showToast("Sorteio realizado com sucesso.");
+    // }
+
+    async function sortearAPI(participants, winnersCount, mode) {
+        const response = await fetch("https://m2qjk8lraf.execute-api.us-east-1.amazonaws.com/prod/sorteio",
+          {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ participants, winnersCount, mode })
+          });
       }
 
-      if (mode === "no-repeat" && requested > participants.length) {
-        showToast("Sem repetição: a quantidade de vencedores não pode exceder a de participantes.");
-        return;
-      }
+      async function draw() {
+        const participants = parseParticipants(participantsEl.value);
+        const mode = modeEl.value;
+        const requested = Math.max(1, Number(winnersCountEl.value || 1));
 
-      const winners = [];
-      const pool = participants.slice();
+        countParticipants.textContent = String(participants.length);
+        modeLabel.textContent = mode === "repeat" ? "Com repetição" : "Sem repetição";
 
-      for (let k = 0; k < requested; k++) {
-        const source = (mode === "repeat") ? participants : pool;
-        const picked = pickOne(source);
-        winners.push(picked.value);
+        if (participants.length === 0) {
+          showToast("Adicione pelo menos 1 participante.");
+          return;
+        }
 
-        if (mode === "no-repeat") {
-          pool.splice(picked.index, 1);
+        if (mode === "no-repeat" && requested > participants.length) {
+          showToast("Sem repetição: a quantidade de vencedores não pode exceder a de participantes.");
+          return;
+        }
+
+        try {
+          drawBtn.disabled = true;
+          drawBtn.textContent = "Sorteando...";
+
+          const data = await sortearAPI(participants, requested, mode);
+
+          // Se sua Lambda retornar { body: "json string" } (alguns gateways fazem isso)
+          const payload = (data && typeof data.body === "string") ? JSON.parse(data.body) : data;
+
+          if (!payload || payload.error) {
+            showToast(payload?.error || "Erro ao sortear.");
+            return;
+          }
+
+          // Esperado pela Lambda: winners: [...]
+          if (!Array.isArray(payload.winners)) {
+            showToast("Resposta inesperada da API (winners não encontrado).");
+            return;
+          }
+
+          renderWinners(payload.winners);
+          showToast("Sorteio realizado com sucesso.");
+        } catch (err) {
+          console.error(err);
+          showToast("Falha ao chamar a API. Verifique CORS/URL e logs.");
+        } finally {
+          drawBtn.disabled = false;
+          drawBtn.textContent = "Sortear";
         }
       }
 
-      renderWinners(winners);
-      showToast("Sorteio realizado com sucesso.");
-    }
+      function renderWinners(winners) {
+        winnersList.innerHTML = "";
+        countWinners.textContent = String(winners.length);
+        timestampLabel.textContent = formatNow();
 
-    function renderWinners(winners) {
-      winnersList.innerHTML = "";
-      countWinners.textContent = String(winners.length);
-      timestampLabel.textContent = formatNow();
+        winners.forEach((w, i) => {
+          const li = document.createElement("li");
+          li.textContent = `${i + 1}. ${w}`;
+          winnersList.appendChild(li);
+        });
 
-      winners.forEach((w, i) => {
-        const li = document.createElement("li");
-        li.textContent = `${i + 1}. ${w}`;
-        winnersList.appendChild(li);
+        winnerText.textContent = winners.length === 1 ? winners[0] : `${winners[0]} +${winners.length - 1}`;
+      }
+
+      function resetAll() {
+        participantsEl.value = "";
+        winnersCountEl.value = 1;
+        modeEl.value = "no-repeat";
+        winnerText.textContent = "—";
+        winnersList.innerHTML = "";
+        countParticipants.textContent = "0";
+        countWinners.textContent = "0";
+        modeLabel.textContent = "Sem repetição";
+        timestampLabel.textContent = "—";
+        showToast("Campos limpos.");
+      }
+
+      async function copyWinners() {
+        const items = [...winnersList.querySelectorAll("li")].map(li => li.textContent.replace(/^\d+\.\s*/, ""));
+        if (items.length === 0) {
+          showToast("Não há vencedores para copiar.");
+          return;
+        }
+        const text = items.join("\n");
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast("Vencedores copiados.");
+        } catch {
+          showToast("Não foi possível copiar (permissão do navegador).");
+        }
+      }
+
+      drawBtn.addEventListener("click", draw);
+      resetBtn.addEventListener("click", resetAll);
+      copyBtn.addEventListener("click", copyWinners);
+
+      participantsEl.addEventListener("input", () => {
+        const participants = parseParticipants(participantsEl.value);
+        countParticipants.textContent = String(participants.length);
       });
-
-      winnerText.textContent = winners.length === 1 ? winners[0] : `${winners[0]} +${winners.length - 1}`;
-    }
-
-    function resetAll() {
-      participantsEl.value = "";
-      winnersCountEl.value = 1;
-      modeEl.value = "no-repeat";
-      winnerText.textContent = "—";
-      winnersList.innerHTML = "";
-      countParticipants.textContent = "0";
-      countWinners.textContent = "0";
-      modeLabel.textContent = "Sem repetição";
-      timestampLabel.textContent = "—";
-      showToast("Campos limpos.");
-    }
-
-    async function copyWinners() {
-      const items = [...winnersList.querySelectorAll("li")].map(li => li.textContent.replace(/^\d+\.\s*/, ""));
-      if (items.length === 0) {
-        showToast("Não há vencedores para copiar.");
-        return;
-      }
-      const text = items.join("\n");
-      try {
-        await navigator.clipboard.writeText(text);
-        showToast("Vencedores copiados.");
-      } catch {
-        showToast("Não foi possível copiar (permissão do navegador).");
-      }
-    }
-
-    drawBtn.addEventListener("click", draw);
-    resetBtn.addEventListener("click", resetAll);
-    copyBtn.addEventListener("click", copyWinners);
-
-    participantsEl.addEventListener("input", () => {
-      const participants = parseParticipants(participantsEl.value);
-      countParticipants.textContent = String(participants.length);
-    });
   </script>
 </body>
+
 </html>
