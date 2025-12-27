@@ -483,12 +483,19 @@ Carla"></textarea>
     //   showToast("Sorteio realizado com sucesso.");
     // }
 
-    async function sortearAPI(participants, winnersCount, mode) {
-        const response = await fetch("https://m2qjk8lraf.execute-api.us-east-1.amazonaws.com/prod/sorteio",
-          {
-            method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ participants, winnersCount, mode })
-          });
+      async function sortearAPI(participants, winnersCount, mode) {
+        const response = await fetch("https://1erkayemb9.execute-api.us-east-1.amazonaws.com/prod/SorteioFunc", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            participants,
+            winnersCount,
+            mode
+          })
+        });
+
+        const data = await response.json();
+        return data;
       }
 
       async function draw() {
